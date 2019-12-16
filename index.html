@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+  </script>
+
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <table>
+
+      <tr>
+        <td colspan="5">
+          <h1>Directory</h1>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td colspan="1"><input type="button" value="new contact" class="btnNewContact"></td>
+      </tr>
+
+    </table>
+    <hr>
+  </div>
+
+  <div>
+    <table border="1">
+
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Category</th>
+          <th>Memo</th>
+          <th colspan="2"></th>
+
+        </tr>
+
+
+
+
+      </thead>
+      <tbody id="bodyContent">
+        <tr id="noContactTr">
+          <td colspan="7">No contact !</td>
+        </tr>
+        <tr class="item">
+          <td >
+            <span class="num" >1</span>
+          </td>
+          <td>
+            <span class="name">Lucy</span>
+            <input id = "inputName" type="text" style="display: none;"></input>
+          </td>
+          <td >
+             <span class="phone">0912345678</span>
+             <input id = "inputPhone" type="text" style="display: none;"></input>
+            </td>
+          <td>
+            <span class="category">friend</span>
+            <select name="category" id = "inputCategory" style="display: none;">
+              <option value="" selected></option>
+              <option value="family">family</option>
+              <option value="friend">friend</option>
+              <option value="co-worker">co-worker</option>
+              <option value="teacher">teacher</option>
+              <option value="acquaitance">acquaitance</option>
+              <option value="classmate">classmate</option>
+            </select>
+          </td>
+          <td >
+            <span class="memo">cat person</span>
+            <textarea id = "inputMemo" cols="30" rows="3" style="display: none;">輸入你想要寫的內容...</textarea>
+          </td>
+          <td>
+            <span id="btnsForDisplay">
+                <input type="button" value="Edit" class="edit">
+                <input type="button" value="Remove" class="remove">                
+            </span>
+
+            <span id="btnsForEdit" style="display: none;">
+                <input type="button" value="Save" id="btnCreateNewContact">
+                <input type="button" value="Cancel" id="cancelEditing">
+            </span>
+           </td>
+        </tr>
+
+        <tr>
+          <td>02</td>
+          <td>Harry</td>
+          <td>0912000123</td>
+          <td>co-worker</td>
+         <td>qwer</td>
+          <td>
+              <span id="btnsForDisplay">
+                  <input type="button" value="Edit" class="edit">
+                  <input type="button" value="Remove" class="remove">                
+              </span>
+    
+              <span id="btnsForEdit" style="display: none;">
+                  <input type="button" value="Save" id="btnCreateNewContact">
+                  <input type="button" value="Cancel" id="cancelEditing">
+              </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>03</td>
+          <td>Rita</td>
+          <td>0912123456</td>
+          <td>family</td>
+          <td>english class (Tue.)</td>
+          <td>
+              <span id="btnsForDisplay">
+                  <input type="button" value="Edit" class="edit">
+                  <input type="button" value="Remove" class="remove">                
+              </span>
+    
+              <span id="btnsForEdit" style="display: none;">
+                  <input type="button" value="Save" id="btnCreateNewContact">
+                  <input type="button" value="Cancel" id="cancelEditing">
+              </span>
+          </td>
+
+        </tr>
+        <!-- edit -->
+        <tr>
+          <td>04</td>
+          <td><input type="text" value="Janet"></td>
+          <td><input type="tel" value="0911555555"></td>
+          <td><select name="category">
+              <option value="family">family</option>
+              <option value="friend">friend</option>
+              <option value="co-worker">co-worker</option>
+              <option value="teacher">teacher</option>
+              <option value="acquaitance">acquaitance</option>
+              <option value="classmate">classmate</option>
+            </select>
+          </td>
+          <td><textarea name="memoContent" cols="30" rows="3">輸入你想要寫的內容...</textarea></td>
+          <td>
+              <span id="btnsForNewContact">
+                  <input type="button" value="Save" id = "btnCreateNewContact">
+                  <input type="button" value="Cancel" id="cancelAdding">
+              </span>
+            <td>
+        </tr>
+        <!-- add new contact -->
+        <!-- <tr>
+                  <td class="itemNumber"></td>
+                  <td><input type="text" placeholder="Name"></td>
+                  <td><input type="tel" placeholder="Phone"></td>
+                  <td><select name="select" >
+                    <option value="selected"></option>
+                    <option value="family">family</option>
+                    <option value="friend">friend</option>
+                    <option value="co-worker">co-worker</option>
+                    <option value="teacher">teacher</option>
+                    <option value="acquaitance">acquaitance</option>
+                    <option value="classmate">classmate</option>
+                  </select>
+                  </td>
+                  <td><textarea name="memoContent"  cols="30" rows="3" placeholder="write anything you want"></textarea></td>
+                  <td><input type="button" value="Save"></td>
+                  <td><input type="button" value="Cancel" id="cancelAdding"></td>
+                  
+                
+                </tr> -->
+      </tbody>
+    </table>
+  </div>
+
+  <div id="tmplNewContract" style="display: none;">
+    <table>
+      <tr id="addNewContactHtml">
+        <td class="itemNumber"></td>
+        <td><input type="text" placeholder="Name"></td>
+        <td><input type="tel" placeholder="Phone"></td>
+        <td><select name="select">
+            <option value="selected"></option>
+            <option value="family">${asds}</option>
+            <option value="friend">friend</option>
+            <option value="co-worker">co-worker</option>
+            <option value="teacher">teacher</option>
+            <option value="acquaitance">acquaitance</option>
+            <option value="classmate">classmate</option>
+          </select>
+        </td>
+        <td><textarea name="memoContent" cols="30" rows="3" placeholder="write anything you want"></textarea></td>
+        <td>
+          <span id="btnsForNewContact">
+              <input type="button" value="Save" id = "btnCreateNewContact">
+              <input type="button" value="Cancel" id="cancelAdding">
+
+          </span>
+        <td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="templEditContact" style="display: none;">
+    <table>
+
+      <tr>
+        <td>04</td>
+        <td><input type="text" value="Janet"></td>
+        <td><input type="tel" value="0911555555"></td>
+        <td><select name="category">
+            <option value="family">family</option>
+            <option value="friend">friend</option>
+            <option value="co-worker">co-worker</option>
+            <option value="teacher">teacher</option>
+            <option value="acquaitance">acquaitance</option>
+            <option value="classmate">classmate</option>
+          </select>
+        </td>
+        <td><textarea name="memoContent" cols="30" rows="3">輸入你想要寫的內容...</textarea></td>
+        <td><input type="button" value="Save" id="btnCreateNewContact"></td>
+        <td><input type="button" value="Cancel"></td>
+      </tr>
+
+    </table>
+
+  </div>
+
+  <script>
+
+    var contact= {};
+    var contactList= {};
+    
+    var contact = {
+      number: "",
+      name: "",
+      phone: "",
+      category: "",
+      memo: "",
+    };
+
+    
+    
+    //add new contact
+    $(document).ready(function () {
+
+      //
+      registerNewContactButtonClickEvent();
+      
+      //remove contact info
+      registerRemoveContactClickEvent();
+
+      //edit contact info 
+      registerEditContactClickEvent();
+
+    });
+
+
+    function registerEditContactClickEvent(){
+      var name = "";
+      var phone = "";
+      var category = "";
+      var memo = "";
+      $(".edit").click(function () {
+
+        var tr = $(this).closest("tr");
+        $(tr).find("span").hide();
+        $(tr).find("#btnsForDisplay").hide();
+        $(tr).find(":text").show();
+        $(tr).find("#inputCategory").show();
+        $(tr).find("#inputMemo").show();
+        $(tr).find("#btnsForEdit").show();
+        $(tr).find(".num").show();
+        
+        
+        
+        name = tr.find(".name").text();
+        phone = tr.find(".phone").text();
+        category = tr.find(".category").text();
+        memo = tr.find(".memo").text();
+        //set value to input mode
+        $(tr).find("#inputName").val(name);
+        $(tr).find("#inputPhone").val(phone);
+        $(tr).find("#inputCategory").val(category);
+        $(tr).find("#inputMemo").val(memo);
+        
+        //cancel editing contact--done
+        $("#cancelEditing").on("click",function(){
+        var tr2 = $(this).closest("tr");
+        $(tr2).find(":text").hide();
+        $(tr2).find("span").show();
+        $(tr2).find("#inputCategory").hide();
+        $(tr2).find("#inputMemo").hide();
+        $(tr2).find("#btnsForDisplay").show();
+        $(tr2).find("#btnsForEdit").hide();
+        });
+
+      
+        //save contact 
+        $("#btnCreateNewContact").on("click",function(){
+          //get value from input
+          var tr3 = $(this).closest("tr");
+          name = tr3.find("#inputName").val();
+          phone = tr3.find("#inputPhone").val();
+          category = tr3.find("#inputCategory").val();
+          memo = tr3.find("#inputMemo").val();
+          //set value to display text mode
+          tr3.find(".name").text("hello");
+          
+
+
+          
+        });
+      });
+    }
+
+    function registerRemoveContactClickEvent(){
+      $(".remove").click(function () {
+        var answer = confirm("Are you sure you want to delete this contact info?");
+        if (answer == true) {
+          $(this).parents("tr:eq(0)").remove();
+        } else {
+          //do nothing
+        }
+      });
+    }
+    
+
+    function registerNewContactButtonClickEvent(){
+      $(".btnNewContact").click(function () {
+        var trObj = $("#tmplNewContract tbody tr")[0].outerHTML;
+        $("#bodyContent").append(trObj);
+        //bind click event on canceladding button
+        $("#cancelAdding").on("click", function () {
+          $("#addNewContactHtml").remove();
+        });
+
+      });
+    }
+
+  </script>
+</body>
+</html>

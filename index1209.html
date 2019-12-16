@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js">
+  </script>
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <title>Directory1206</title>
+</head>
+
+<body>
+  <div>
+    <table>
+      <tr>
+        <td colspan="5">
+          <h1>Directory</h1>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td colspan="1"><input type="button" value="New Contact" id="btnNewContact"></td>
+       
+      </tr>
+
+    </table>
+    <hr>
+  </div>
+
+  <div>
+    <table border="1">
+
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Name</th>
+          <th>Phone</th>
+          <th>Category</th>
+          <th>Memo</th>
+          <th>Actions</th>
+
+        </tr>
+
+      </thead>
+      <tbody id="bodyContent">
+        <tr id="noContactTr">
+          <td colspan="7">No contact !</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="tmplNewContract" style="display: none;">
+    <table>
+      <tr id="addNewContactHtml">
+        <td>
+          <span id="num"></span>
+        </td>
+        <td>
+          <span class="name" style="display: none;"></span>
+          <input class="inputName" type="text" placeholder="name">
+        </td>
+        <td>
+          <span class="phone" style="display: none;"></span>
+          <input class="inputPhone" type="text" placeholder="phone number">
+        </td>
+        <td>
+          <span class="category" style="display: none;"></span>
+          <select name="category" class="inputCategory">
+            <option selected="selected" value="Family">Family</option>
+            <option value="Friend">Friend</option>
+            <option value="Co-worker">Co-worker</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Acquaitance">Acquaitance</option>
+            <option value="Classmate">Classmate</option>
+          </select>
+        </td>
+        <td>
+          <span class="memo" style="display: none;"></span>
+          <textarea class="inputMemo" cols="30" rows="3" placeholder="輸入你想要寫的內容..."></textarea>
+        </td>
+        <td>
+          <span class="btnsForDisplay" style="display: none;">
+            <input type="button" value="Edit" id="edit">
+            <input type="button" value="Remove" id="remove">
+          </span>
+
+          <span class="btnsForEdit">
+            <input type="button" value="Save" id="btnSaveContact">
+            <input type="button" value="Cancel" id="btnCancelEditing">
+          </span>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="templNoContact" style="display: none;">
+    <table>
+      <tbody>
+        <tr id="noContactTr" class="noContactTr">
+          <td colspan="7">No contact !</td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+  <script>
+    var name = "";
+    var phone = "";
+    var category = "";
+    var memo = "";
+    var contactList = [];
+    var isEdit = false;
+    var userName = "";
+
+    $(document).ready(function () {
+
+      registerNewContactButtonClickEvent();
+      registerCancelEditingButtonClickEvent();
+      registerSaveContactButtonClickEvent();
+      registerRemoveContactClickEvent();
+      registerEditContactClickEvent();
+      userName = prompt("please input your name", "");
+      checkCookie()
+      
+      registerHoverEvent();
+    });
+    function registerHoverEvent() {
+      $("div").on("hover", function () {
+        $(".newTr").hover(function () { $(this).addClass("enter") }, function () { $(this).removeClass("enter") });
+        $(":button").hover(function () { $(this).addClass("enterBtn") }, function () { $(this).removeClass("enterBtn") });
+      })
+
+    }
+    function dealWithJson() {
+      var jsonObject = JSON.stringify(contactList);
+      setCookie(userName, jsonObject, 10);
+
+    }
+
+    function setCookie(cname, cvalue, exdays) {
+      var date = new Date();
+      date.setTime(date.getTime() + (exdays * 24 * 60 * 60 * 1000));
+      var expires = "expires=" + date.toGMTString();
+      document.cookie = cname + "=" + cvalue + "; " + expires;
+
+    }
+
+    function checkCookie() {
+
+      if (userName != "") {
+        alert("Welcome~ " + userName);
+        var contactObjects = getCookie(userName);
+        var contactListFromCookie = JSON.parse(contactObjects);
+        contactList = contactListFromCookie;
+        displayContacts();
+
+      } else {
+        prompt("please input your name", "");
+        if (userName != "" && userName != null) {
+          dealWithJson();
+        }
+      }
+    }
+
+    function getCookie(name) {
+        var value = "; " + document.cookie;
+        console.log("value = " + value);
+
+        var parts = value.split("; " + name + "=");
+        console.log("parts = " + parts);
+        if (parts.length == 2) return parts.pop().split(";").shift();
+
+      }
+
+    function registerNewContactButtonClickEvent() {
+      $("#btnNewContact").click(function () {
+        // $("#noContactTr").remove();
+        $("#bodyContent").find("#noContactTr").hide();
+        var trObj = $("#tmplNewContract tbody tr")[0].outerHTML;
+        $("#bodyContent").append(trObj);
+        $("#bodyContent").find("tr").addClass("newTr");
+      })
+    }
+
+    function registerCancelEditingButtonClickEvent() {
+      $("div").on("click", "#btnCancelEditing", function () {
+
+        if (isEdit === false) {
+          var tr = $(this).closest("tr");
+          tr.find("#num");
+          tr.remove();
+        } else {
+          isEdit = false;
+        }
+        displayContacts();
+      });
+    }
+
+
+    function registerRemoveContactClickEvent() {
+      $("div").on("click", "#remove", function (event) {
+        var answer = confirm("Are you sure you want to delete this contact info?");
+        if (answer == true) {
+          var tr = $(this).closest("tr");
+          var index = tr.find("#num").text();
+          contactList[index - 1]
+          contactList.splice(index - 1, 1);
+          displayContacts();
+        } else {
+          //do nothing
+        }
+      });
+
+    }
+    //首次save
+    function registerSaveContactButtonClickEvent() {
+
+      $("div").on("click", "#btnSaveContact", function () {
+        //get value from input
+
+        var tr3 = $(this).closest("tr");
+        var itemNumber
+        name = tr3.find(".inputName").val();
+        phone = tr3.find(".inputPhone").val();
+        category = tr3.find(".inputCategory").val();
+        memo = tr3.find(".inputMemo").val();
+
+        if (isEdit === true) {
+
+          var num = tr3.find("#num").text();
+          isEdit = false;
+          var contactObject = contactList[num - 1];
+          contactObject.name = name;
+          contactObject.phone = phone;
+          contactObject.category = category;
+          contactObject.memo = memo;
+
+        } else {
+          //filter the value isn't null
+          var contact = {};
+          contact['name'] = name;
+          contact['phone'] = phone;
+          contact['category'] = category;
+          contact['memo'] = memo;
+          // add contact to contactList
+          contactList.push(contact);
+          //set value to display text mode
+          itemNumber = contactList.length;
+
+          if (tr3.find("#num").text().length == 0) {
+            tr3.find("#num").text(itemNumber);
+          }
+        }
+        //change to display mode
+        displayContacts();
+
+      });
+
+    }
+
+    function registerEditContactClickEvent() {
+
+      var name = "";
+      var phone = "";
+      var category = "";
+      var memo = "";
+
+      $("div").on('click', '#edit', function (event) {
+        isEdit = true;
+        var tr = $(this).closest("tr");
+        $(tr).find("span").hide();
+        $(tr).find(".btnsForDisplay").hide();
+        $(tr).find(":text").show();
+        $(tr).find(".inputCategory").show();
+        $(tr).find(".inputMemo").show();
+        $(tr).find(".btnsForEdit").show();
+        $(tr).find("#num").show();
+
+        name = tr.find(".name").text();
+        phone = tr.find(".phone").text();
+        category = tr.find(".category").text();
+        memo = tr.find(".memo").text();
+        //set value to input mode
+        $(tr).find(".inputName").val(name);
+        $(tr).find(".inputPhone").val(phone);
+        $(tr).find(".inputCategory").val(category);
+        $(tr).find(".inputMemo").val(memo);
+
+      });
+    }
+
+    function displayContacts() {
+      dealWithJson();
+      $("#bodyContent").empty();
+      if (contactList.length === 0) {
+        var noContactTemp = $(".noContactTr")[0].outerHTML;
+        $("#bodyContent").append(noContactTemp);
+
+      } else {
+
+        for (i = 0; i < contactList.length; i++) {
+          var contactObject = contactList[i];
+          var trObj = $("#tmplNewContract tbody tr")[0].outerHTML;
+          $("#bodyContent").append(trObj);
+          $("#bodyContent").find("tr").addClass("newTr");
+
+          var tr = $("#bodyContent tr")[i];
+          $(tr).find("#num").text(i + 1);
+          $(tr).find(".name").text(contactObject.name);
+          $(tr).find(".phone").text(contactObject.phone);
+          $(tr).find(".category").text(contactObject.category);
+          $(tr).find(".memo").text(contactObject.memo);
+        }
+
+        $(".newTr").find(":text").hide();
+        $(".newTr").find(".name").show();
+        $(".newTr").find(".phone").show();
+        $(".newTr").find(".category").show();
+        $(".newTr").find(".memo").show();
+        $(".newTr").find(".inputCategory").hide();
+        $(".newTr").find(".inputMemo").hide();
+        $(".newTr").find(".btnsForDisplay").show();
+        $(".newTr").find(".btnsForEdit").hide();
+      }
+    }
+
+    function checkInputValue(){
+      
+    }
+  </script>
+</body>
+
+</html>
